@@ -11,8 +11,10 @@ class LaptopAdminForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['image'].help_text = mark_safe(
-            '<span style="color:red; font-size:14px;">Минимальное разрешение для изображения {}x{}</span>'.format(
-                *Product.min_resolution
+            """<span style="color:red; font-size:14px;">При загрузке изображения больше {}x{} 
+            оно будет обрезано </span>
+            """.format(
+                *Product.max_resolution
             )
         )
 
