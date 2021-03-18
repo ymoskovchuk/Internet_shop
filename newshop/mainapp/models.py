@@ -80,15 +80,7 @@ class Product(models.Model):
         return self.title
 
     def save(self, *args, **kwargs):
-        # image = self.image
-        # img = Image.open(image)
-        # min_height, min_width = self.min_resolution
-        # max_height, max_width = self.max_resolution
-        #
-        # if img.height < min_height or img.width < min_width:
-        #     raise MinResolutionErrorException('Разрешение изображения меньше минимального')
-        # if img.height > max_height or img.width > max_width:
-        #     raise MaxResolutionErrorException('Разрешение изображения больше максимального')
+
         image = self.image
         img = Image.open(image)
         new_img = img.convert('RGB')
@@ -150,7 +142,7 @@ class CartProduct(models.Model):
     final_price = models.DecimalField(max_digits=9, decimal_places=2, verbose_name='Финальная цена')
 
     def __str__(self):
-        return f'Product: {self.product.title}'
+        return f'Product: {self.content_object.title}'
 
 
 class Cart(models.Model):
@@ -159,6 +151,8 @@ class Cart(models.Model):
     products = models.ManyToManyField(CartProduct, blank=True, related_name='related_cart')
     total_products = models.PositiveIntegerField(default=0)
     final_price = models.DecimalField(max_digits=9, decimal_places=2, verbose_name='Финальная цена')
+    in_order = models.BooleanField(default=False)
+    for_anonymous_user = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.id)
