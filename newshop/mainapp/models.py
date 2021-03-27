@@ -122,6 +122,9 @@ class Product(models.Model):
 
         super().save(*args, **kwargs)
 
+    def get_model_name(self):
+        return self.__class__.__name__.lower()
+
 
 class Laptop(Product):
 
@@ -171,11 +174,14 @@ class CartProduct(models.Model):
     final_price = models.DecimalField(max_digits=9, decimal_places=2, verbose_name='Финальная цена')
 
     def __str__(self):
-        return f'Product: {self.content_object.title}'
+        return f'Продукт: {self.content_object.title}'
 
     def save(self, *args, **kwargs):
         self.final_price = self.qty * self.content_object.price
         super().save(*args, **kwargs)
+
+    def get_model_name(self):
+        return self.__class__._meta.model_name
 
 
 class Cart(models.Model):
@@ -192,7 +198,6 @@ class Cart(models.Model):
 
     def save(self, *args, **kwargs):
         cart_data = self.products.aggregate(models.Sum('final_price'), models.Count('id'))
-        print(cart_data)
         if cart_data.get('final_price__sum'):
             self.final_price = cart_data['final_price__sum']
         else:
