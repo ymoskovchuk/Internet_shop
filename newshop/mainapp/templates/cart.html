@@ -7,7 +7,7 @@
           <div class="alert alert-success alert-dismissible fade show" role="alert">
         <strong>{{ message }}</strong>
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+          <span aria-hidden="true">&times</span>
         </button>
 </div>
     {% endfor %}
@@ -49,6 +49,7 @@
           <td> Итого </td>
           <td>{{ cart.total_products }}</td>
           <td><strong>{{ cart.final_price }} ГРН </strong></td>
+          <td><a href="{% url 'checkout' %}"><button class="btn btn-primary">Перейти к оформлению</button> </a> </td>
         </tr>
   </tbody>
 </table>
