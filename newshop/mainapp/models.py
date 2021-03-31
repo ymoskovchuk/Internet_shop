@@ -198,15 +198,6 @@ class Cart(models.Model):
     def __str__(self):
         return str(self.id)
 
-    def save(self, *args, **kwargs):
-        cart_data = self.products.aggregate(models.Sum('final_price'), models.Count('id'))
-        if cart_data.get('final_price__sum'):
-            self.final_price = cart_data['final_price__sum']
-        else:
-            self.final_price = 0
-        self.total_products = cart_data['id__count']
-        super().save(*args, **kwargs)
-
 
 class Customer(models.Model):
 
@@ -244,6 +235,7 @@ class Order(models.Model):
     customer = models.ForeignKey(Customer, verbose_name='Покупатель', related_name='related_orders', on_delete=models.CASCADE)
     first_name = models.CharField(max_length=255, verbose_name='Имя')
     last_name = models.CharField(max_length=255, verbose_name='Фамилия')
+    cart = models.ForeignKey(Cart, verbose_name='Корзина', on_delete=models.CASCADE, null=True, blank=True)
     phone = models.CharField(max_length=20, verbose_name='Номер телефона')
     address = models.CharField(max_length=500, verbose_name='Адрес', null=True, blank=True)
     status = models.CharField(
@@ -259,7 +251,7 @@ class Order(models.Model):
         default=BUYING_TYPE_SELF
     )
     comment = models.TextField(verbose_name='Комментарий к заказу', null=True, blank=True)
-    created_at = models.DateTimeField(auto_created=True, verbose_name='Дата создания заказа')
+    created_at = models.DateTimeField(auto_now=True, verbose_name='Дата создания заказа')
     order_date = models.DateField(verbose_name='Дата получения заказа', default=timezone.now)
 
     def __str__(self):
