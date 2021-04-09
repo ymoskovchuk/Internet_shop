@@ -108,21 +108,21 @@ class Product(models.Model):
     def __str__(self):
         return self.title
 
-    def save(self, *args, **kwargs):
-
-        image = self.image
-        img = Image.open(image)
-        new_img = img.convert('RGB')
-        resized_new_img = new_img.resize((500, 500), Image.ANTIALIAS)
-        filestream = BytesIO()
-        resized_new_img.save(filestream, 'JPEG', quality=90)
-        filestream.seek(0)
-        name = '{}.{}'.format(*self.image.name.split('.'))
-        self.image = InMemoryUploadedFile(
-            filestream, 'ImageField', name, 'jpeg/image', sys.getsizeof(filestream), None
-        )
-
-        super().save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #
+    #     image = self.image
+    #     img = Image.open(image)
+    #     new_img = img.convert('RGB')
+    #     resized_new_img = new_img.resize((500, 500), Image.ANTIALIAS)
+    #     filestream = BytesIO()
+    #     resized_new_img.save(filestream, 'JPEG', quality=90)
+    #     filestream.seek(0)
+    #     name = '{}.{}'.format(*self.image.name.split('.'))
+    #     self.image = InMemoryUploadedFile(
+    #         filestream, 'ImageField', name, 'jpeg/image', sys.getsizeof(filestream), None
+    #     )
+    #
+    #     super().save(*args, **kwargs)
 
     def get_model_name(self):
         return self.__class__.__name__.lower()
